@@ -44,7 +44,7 @@ public class Sudoku {
   }
   
   private boolean isLegal(int row, int col, int num) {
-    return !(inRow(row, num) || inCol(col, num) || inBox(row, col, num));
+    return safeRow(row, num) && safeCol(col, num) && safeBox(row, col, num);
   }
   
   public int[][] getOriginal(){
@@ -55,44 +55,67 @@ public class Sudoku {
     return board;
   }
   
-  private boolean inRow(int row, int num) {
+  private boolean safeRow(int row, int num) {
     for(int i = 0; i < 9; i++) {
       if(board[row][i] == num) {
-        return true;
+        return false;
       }
     }
-    return false;
+    return true;
   }
   
-  private boolean inCol(int col, int num) {
+  private boolean safeCol(int col, int num) {
     for(int i = 0; i < 9; i++) {
       if(board[i][col] == num) {
-        return true;
+        return false;
       }
     }
-    return false;
+    return true;
   }
   
-  private boolean inBox(int row, int col, int num) {
+  private boolean safeBox(int row, int col, int num) {
     int r = row - row % 3;
     int c = col - col % 3;
     for(int i = r; i < r + 3; i++) {
       for(int j = c; j < c + 3; j++) {
         if(board[i][j] == num) {
-          return true;
+          return false;
         }
       }
     }
-    return false;
+    return true;
   }
   
-  public void drawSudoku()
+  public void drawSolution()
   {
     for(int i = 0; i < 9; i++) {  
       for(int j = 0; j < 9; j++) {
+        if(j != 0 && j % 3 == 0) {
+          System.out.print("| ");
+        }
         System.out.print(board[i][j] + "  ");
       }
       System.out.println();
+      if(i == 2 || i == 5) {
+        System.out.println("- - - - - - - - - - - - - - -");
+      }
+      System.out.println();
+    }
+  }
+  
+  public void drawOriginal()
+  {
+    for(int i = 0; i < 9; i++) {  
+      for(int j = 0; j < 9; j++) {
+        if(j != 0 && j % 3 == 0) {
+          System.out.print("| ");
+        }
+        System.out.print(original[i][j] + "  ");
+      }
+      System.out.println();
+      if(i == 2 || i == 5) {
+        System.out.println("- - - - - - - - - - - - - - -");
+      }
       System.out.println();
     }
   }

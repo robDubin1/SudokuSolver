@@ -1,19 +1,32 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class Test {
   public static void main(String[] args) {
-    int[][] board1 = {
-        { 0, 0, 7, 2, 4, 0, 0, 0, 0 },
-        { 2, 6, 0, 5, 8, 0, 0, 0, 0 },
-        { 8, 4, 0, 0, 6, 1, 0, 0, 0 },
-        { 0, 3, 0, 0, 0, 0, 0, 0, 8 },
-        { 0, 0, 9, 0, 0, 0, 6, 0, 0 },
-        { 4, 0, 0, 0, 0, 0, 0, 5, 0 },
-        { 0, 0, 0, 6, 2, 0, 0, 3, 1 },
-        { 0, 0, 0, 0, 7, 5, 0, 2, 4 },
-        { 0, 0, 0, 0, 1, 8, 5, 0, 0 } 
-    };
-    Sudoku puzzle1 = new Sudoku(board1);
-    puzzle1.solveSudoku();
-    puzzle1.drawSudoku();
+    long time = System.nanoTime();
+    int numPuzzles = -1;
+    try {
+      BufferedReader scanner = new BufferedReader(new FileReader("./src/Files/sudokuPuzzles.txt"));
+      String line = scanner.readLine();
+      numPuzzles = Integer.parseInt(line);
+      System.out.println("Number of Puzzles: " + numPuzzles);
+      int solved = 0;
+      while(solved < numPuzzles) {
+        line = scanner.readLine();
+        int[][] board = new int[9][9];
+        for(int i = 0; i < 81; i++) {
+          board[i / 9][i % 9] = Integer.parseInt(line.substring(i, i + 1));
+        }
+        Sudoku puzzle = new Sudoku(board);
+        puzzle.solveSudoku();
+        solved++;
+      }
+    }
+    catch(Exception e){
+      System.out.println(e);
+    }
+    double timeSpent = System.nanoTime() - time;
+    System.out.println("Seconds taken: " + timeSpent / 1000000000);
+    System.out.println("Average seconds taken per puzzle: " + timeSpent / 1000000000 / numPuzzles);
   }
 }
